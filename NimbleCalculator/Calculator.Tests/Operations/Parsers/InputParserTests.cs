@@ -19,7 +19,7 @@ public class InputParserTests
     }
 
     [Fact]
-    public void ParseInput_AddsZero_WhenInputContainsSingleNumber()
+    public void ParseInput_ReturnsSingleValue_WhenInputContainsSingleNumber()
     {
         var result = InputParser.ParseInput("5");
         Assert.Equal([5], result);
