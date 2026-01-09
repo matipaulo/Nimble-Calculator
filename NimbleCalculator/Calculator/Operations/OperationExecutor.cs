@@ -1,6 +1,7 @@
 ﻿namespace Calculator.Operations;
 
 using System.Linq.Expressions;
+using Calculator.Exceptions;
 
 public sealed class OperationExecutor
 {
@@ -15,6 +16,10 @@ public sealed class OperationExecutor
     {
         if (numbers.Count == 0)
             throw new InvalidOperationException("No numbers to process.");
+
+        var negativeNumbers = numbers.Where(n => n < 0).ToList();
+        if (negativeNumbers.Count > 0)
+            throw new NegativeNumbersException(negativeNumbers);
 
         var resultExpression = numbers
             .Select((_, i) => Expression.Constant(numbers[i]))

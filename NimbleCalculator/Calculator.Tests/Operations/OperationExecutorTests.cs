@@ -1,5 +1,6 @@
 ﻿namespace Calculator.Tests.Operations;
 
+using Calculator.Exceptions;
 using Calculator.Operations;
 
 public class OperationExecutorTests
@@ -36,24 +37,31 @@ public class OperationExecutorTests
     }
 
     [Fact]
-    public void ExecuteOnCollection_HandlesNegativeNumbersCorrectly()
+    public void ExecuteOnCollection_ThrowsException_WhenNegativeNumbersProvided()
     {
         var operation = new SumOperation();
         var executor = new OperationExecutor(operation);
 
-        var result = executor.ExecuteOnCollection(new List<int> { -1, -2, -3 });
+        var exception = Assert.Throws<NegativeNumbersException>(() =>
+            executor.ExecuteOnCollection(new List<int> { -1, -2, -3 }));
 
-        Assert.Equal(-6, result);
+        Assert.Contains("-1", exception.Message);
+        Assert.Contains("-2", exception.Message);
+        Assert.Contains("-3", exception.Message);
     }
 
     [Fact]
-    public void ExecuteOnCollection_HandlesMixedPositiveAndNegativeNumbers()
+    public void ExecuteOnCollection_ThrowsException_WhenMixedWithNegativeNumbers()
     {
         var operation = new SumOperation();
         var executor = new OperationExecutor(operation);
 
-        var result = executor.ExecuteOnCollection(new List<int> { -1, 2, -3, 4 });
+        var exception = Assert.Throws<NegativeNumbersException>(() =>
+            executor.ExecuteOnCollection(new List<int> { -1, 2, -3, 4 }));
 
-        Assert.Equal(2, result);
+        Assert.Contains("-1", exception.Message);
+        Assert.Contains("-3", exception.Message);
+        Assert.DoesNotContain("2", exception.Message);
+        Assert.DoesNotContain("4", exception.Message);
     }
 }
