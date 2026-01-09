@@ -3,7 +3,7 @@ using Calculator.Parsers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-var host = Host.CreateDefaultBuilder(args)
+using var host = Host.CreateDefaultBuilder(args)
     .ConfigureServices(services =>
     {
         services.AddSingleton<IInputParser, InputParser>();
@@ -12,12 +12,21 @@ var host = Host.CreateDefaultBuilder(args)
     })
     .Build();
 
+using var cts = new CancellationTokenSource();
+Console.CancelKeyPress += (_, e) =>
+{
+    e.Cancel = true;
+    if (!cts.IsCancellationRequested)
+        cts.Cancel();
+};
+
 var parser = host.Services.GetRequiredService<IInputParser>();
 var executor = host.Services.GetRequiredService<IOperationExecutor>();
+var token = cts.Token;
 
 Console.Clear();
 
-while (true)
+while (!token.IsCancellationRequested)
 {
     Console.Write(">> ");
     var input = Console.ReadLine();
@@ -37,3 +46,6 @@ while (true)
         Console.WriteLine($"An unexpected error occurred: {ex.Message}");
     }
 }
+
+Console.WriteLine("Application terminated. Press Enter to exit.");
+Console.ReadLine();
