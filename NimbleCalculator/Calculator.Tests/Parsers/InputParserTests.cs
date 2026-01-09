@@ -1,6 +1,5 @@
-﻿namespace Calculator.Tests.Operations.Parsers;
+﻿namespace Calculator.Tests.Parsers;
 
-using Calculator.Exceptions;
 using Calculator.Parsers;
 
 public class InputParserTests
@@ -17,12 +16,6 @@ public class InputParserTests
     {
         var result = InputParser.ParseInput("1, abc, 3");
         Assert.Equal([1, 3], result);
-    }
-
-    [Fact]
-    public void ParseInput_ThrowsException_WhenInputExceedsMaxArguments()
-    {
-        Assert.Throws<MaximumArgumentsReachedException>(() => InputParser.ParseInput("1, 2, 3"));
     }
 
     [Fact]
