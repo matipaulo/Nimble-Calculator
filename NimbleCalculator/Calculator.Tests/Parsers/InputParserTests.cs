@@ -22,7 +22,7 @@ public class InputParserTests
     public void ParseInput_AddsZero_WhenInputContainsSingleNumber()
     {
         var result = InputParser.ParseInput("5");
-        Assert.Equal([5, 0], result);
+        Assert.Equal([5], result);
     }
 
     [Fact]
@@ -44,5 +44,12 @@ public class InputParserTests
     {
         var result = InputParser.ParseInput("1\\n2,3");
         Assert.Equal([1, 2, 3], result);
+    }
+
+    [Fact]
+    public void ParseInput_ReturnsValidValues_WhenInputContainsValueGreaterThan1000()
+    {
+        var result = InputParser.ParseInput("1\\n2,3000");
+        Assert.Equal([1, 2], result);
     }
 }
