@@ -24,4 +24,25 @@ public class InputParserTests
         var result = InputParser.ParseInput("5");
         Assert.Equal([5, 0], result);
     }
+
+    [Fact]
+    public void ParseInput_AddsNumbers_WhenInputContainsMultipleNumbers()
+    {
+        var result = InputParser.ParseInput("1, 2, 3");
+        Assert.Equal([1, 2, 3], result);
+    }
+
+    [Fact]
+    public void ParseInput_ReturnsEmptyList_WhenInputContainsOnlyCommas()
+    {
+        var result = InputParser.ParseInput(",");
+        Assert.Empty(result);
+    }
+
+    [Fact]
+    public void ParseInput_ReturnsValidValues_WhenInputContainsNewLine()
+    {
+        var result = InputParser.ParseInput("1\\n2,3");
+        Assert.Equal([1, 2, 3], result);
+    }
 }
