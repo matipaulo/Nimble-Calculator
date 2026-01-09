@@ -51,6 +51,18 @@ public class OperationExecutorTests
     }
 
     [Fact]
+    public void ExecuteOnCollection_ThrowsException_WhenNegativeNumberProvided()
+    {
+        var operation = new SumOperation();
+        var executor = new OperationExecutor(operation);
+
+        var exception = Assert.Throws<NegativeNumbersException>(() =>
+            executor.ExecuteOnCollection(new List<int> { -1 }));
+
+        Assert.Contains("-1", exception.Message);
+    }
+
+    [Fact]
     public void ExecuteOnCollection_ThrowsException_WhenMixedWithNegativeNumbers()
     {
         var operation = new SumOperation();
