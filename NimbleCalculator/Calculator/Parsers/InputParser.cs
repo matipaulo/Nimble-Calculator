@@ -1,22 +1,23 @@
 ﻿namespace Calculator.Parsers;
 
-public static class InputParser
+public class InputParser : IInputParser
 {
     private const int MaxValueAllowed = 1000;
-    private static readonly IDelimiterStrategy[] Strategies = 
+
+    private static readonly IDelimiterStrategy[] _strategies =
     [
         new MultiCharacterDelimiterStrategy(),
         new SingleCharacterDelimiterStrategy(),
         new DefaultDelimiterStrategy()
     ];
 
-    public static IReadOnlyList<int> ParseInput(string input)
+    public IReadOnlyList<int> ParseInput(string input)
     {
         if (string.IsNullOrWhiteSpace(input))
             return [];
 
         var normalizedInput = input.Replace("\\n", "\n");
-        var strategy = Strategies.First(s => s.CanHandle(normalizedInput));
+        var strategy = _strategies.First(s => s.CanHandle(normalizedInput));
         var (inputToParse, delimiters) = strategy.Extract(normalizedInput);
 
         var result = inputToParse.Split(delimiters, StringSplitOptions.None)

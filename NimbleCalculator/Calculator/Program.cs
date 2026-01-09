@@ -1,5 +1,19 @@
 ﻿using Calculator.Operations;
 using Calculator.Parsers;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+
+var host = Host.CreateDefaultBuilder(args)
+    .ConfigureServices(services =>
+    {
+        services.AddSingleton<IInputParser, InputParser>();
+        services.AddSingleton<IOperation, SumOperation>();
+        services.AddSingleton<IOperationExecutor, OperationExecutor>();
+    })
+    .Build();
+
+var parser = host.Services.GetRequiredService<IInputParser>();
+var executor = host.Services.GetRequiredService<IOperationExecutor>();
 
 Console.Clear();
 
@@ -13,10 +27,7 @@ while (true)
 
     try
     {
-        var numbers = InputParser.ParseInput(input);
-
-        var operation = new SumOperation();
-        var executor = new OperationExecutor(operation);
+        var numbers = parser.ParseInput(input);
         var result = executor.ExecuteOnCollection(numbers);
 
         Console.WriteLine(result);

@@ -3,7 +3,7 @@
 using System.Linq.Expressions;
 using Calculator.Exceptions;
 
-public sealed class OperationExecutor
+public sealed class OperationExecutor : IOperationExecutor
 {
     private readonly IOperation _operation;
 
