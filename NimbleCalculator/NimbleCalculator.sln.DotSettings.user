@@ -3,6 +3,9 @@
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=639d22cb_002D2fd5_002D414d_002Db32a_002Dc02730145ee4/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from &amp;lt;Calculator.Tests&amp;gt;" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;Project Location="D:\Repositories\Nimble-Calculator\NimbleCalculator\Calculator.Tests" Presentation="&amp;lt;Calculator.Tests&amp;gt;" /&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=70ea1b35_002Dbaae_002D4684_002Db1b5_002Db5f59d24daa0/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from &amp;lt;Calculator.Tests&amp;gt;" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;Project Location="D:\Repositories\Nimble-Calculator\NimbleCalculator\Calculator.Tests" Presentation="&amp;lt;Calculator.Tests&amp;gt;" /&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=74b59fe6_002Ddf1e_002D4d49_002D818a_002Dbb0f3843cc57/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from &amp;lt;Calculator.Tests&amp;gt;" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;Project Location="D:\Repositories\Nimble-Calculator\NimbleCalculator\Calculator.Tests" Presentation="&amp;lt;Calculator.Tests&amp;gt;" /&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
