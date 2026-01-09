@@ -16,7 +16,10 @@ while (true)
         var numbers = InputParser.ParseInput(input);
 
         var operation = new SumOperation();
-        Console.WriteLine(operation.Execute(numbers[0], numbers[1]));
+        var executor = new OperationExecutor(operation);
+        var result = executor.ExecuteOnCollection(numbers);
+
+        Console.WriteLine(result);
     }
     catch (Exception ex)
     {
