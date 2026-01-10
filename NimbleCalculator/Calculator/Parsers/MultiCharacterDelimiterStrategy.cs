@@ -2,7 +2,7 @@
 
 public class MultiCharacterDelimiterStrategy : IDelimiterStrategy
 {
-    private static readonly string[] DefaultDelimiters = [",", "\n"];
+    private const int HeaderPrefixLength = 2; // Length of "//" prefix.
 
     public bool CanHandle(string input)
     {
@@ -13,14 +13,16 @@ public class MultiCharacterDelimiterStrategy : IDelimiterStrategy
     {
         var newlineIndex = input.IndexOf('\n');
         if (newlineIndex < 0)
-            return (input, DefaultDelimiters);
+            return (input, DelimiterDefaults.DefaultDelimiters);
 
-        var delimiterSection = input.Substring(2, newlineIndex - 2);
+        // Extract the delimiter section between "//" and the newline.
+        var delimiterSection = input.Substring(HeaderPrefixLength, newlineIndex - HeaderPrefixLength);
         var delimiters = ParseDelimiters(delimiterSection);
 
         if (delimiters.Count == 0)
-            return (input, DefaultDelimiters);
+            return (input, DelimiterDefaults.DefaultDelimiters);
 
+        // Always allow newlines as an additional delimiter.
         delimiters.Add("\n");
         var inputToParse = input.Substring(newlineIndex + 1);
         return (inputToParse, delimiters.ToArray());

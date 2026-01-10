@@ -1,28 +1,35 @@
-﻿using Calculator.Operations;
+﻿using Calculator;
+using Calculator.Operations;
 using Calculator.Parsers;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
-Console.Clear();
+// Configure and build the generic host with all required services.
+using var host = Host.CreateDefaultBuilder(args)
+    .ConfigureServices(services =>
+    {
+        // Parsing
+        services.AddSingleton<IDelimiterStrategy, MultiCharacterDelimiterStrategy>();
+        services.AddSingleton<IDelimiterStrategy, SingleCharacterDelimiterStrategy>();
+        services.AddSingleton<IDelimiterStrategy, DefaultDelimiterStrategy>();
+        services.AddSingleton<IInputParser, InputParser>();
 
-while (true)
+        // Operations
+        services.AddSingleton<IOperation, SumOperation>();
+        services.AddSingleton<IOperationExecutor, OperationExecutor>();
+
+        // Application
+        services.AddSingleton<CalculatorConsoleApp>();
+    })
+    .Build();
+
+// Ensure the application terminates immediately when Ctrl+C is pressed.
+Console.CancelKeyPress += (_, e) =>
 {
-    Console.Write(">> ");
-    var input = Console.ReadLine();
+    e.Cancel = true;
+    Environment.Exit(0);
+};
 
-    if (input is null || string.IsNullOrWhiteSpace(input))
-        continue;
-
-    try
-    {
-        var numbers = InputParser.ParseInput(input);
-
-        var operation = new SumOperation();
-        var executor = new OperationExecutor(operation);
-        var result = executor.ExecuteOnCollection(numbers);
-
-        Console.WriteLine(result);
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine($"An unexpected error occurred: {ex.Message}");
-    }
-}
+// Resolve and run the main console application loop.
+var app = host.Services.GetRequiredService<CalculatorConsoleApp>();
+app.Run();

@@ -1,9 +1,8 @@
 ﻿namespace Calculator.Operations;
 
-using System.Linq.Expressions;
 using Calculator.Exceptions;
 
-public sealed class OperationExecutor
+public sealed class OperationExecutor : IOperationExecutor
 {
     private readonly IOperation _operation;
 
@@ -14,25 +13,31 @@ public sealed class OperationExecutor
 
     public int ExecuteOnCollection(IReadOnlyList<int> numbers)
     {
+        ValidateNumbers(numbers);
+
+        if (numbers.Count == 1)
+            return numbers[0];
+
+        // Apply the binary operation sequentially over the collection.
+        var result = numbers[0];
+        for (var i = 1; i < numbers.Count; i++)
+        {
+            result = _operation.Execute(result, numbers[i]);
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// Validates the input collection and throws when it is empty or contains negative numbers.
+    /// </summary>
+    private static void ValidateNumbers(IReadOnlyList<int> numbers)
+    {
         if (numbers.Count == 0)
             throw new InvalidOperationException("No numbers to process.");
 
         var negativeNumbers = numbers.Where(n => n < 0).ToList();
         if (negativeNumbers.Count > 0)
             throw new NegativeNumbersException(negativeNumbers);
-
-        if (numbers.Count == 1)
-            return numbers[0];
-
-        var resultExpression = numbers
-            .Select((_, i) => Expression.Constant(numbers[i]))
-            .Aggregate((Expression?)null, (current, numberExpression) =>
-                current == null
-                    ? numberExpression
-                    : Expression.Call(Expression.Constant(_operation),
-                        typeof(IOperation).GetMethod("Execute")!,
-                        current, numberExpression));
-
-        return Expression.Lambda<Func<int>>(resultExpression!).Compile()();
     }
 }
