@@ -4,7 +4,13 @@ using Calculator.Parsers;
 
 public class InputParserTests
 {
-    private readonly InputParser _inputParser = new();
+    private readonly InputParser _inputParser = new(
+        new IDelimiterStrategy[]
+        {
+            new MultiCharacterDelimiterStrategy(),
+            new SingleCharacterDelimiterStrategy(),
+            new DefaultDelimiterStrategy()
+        });
 
     [Fact]
     public void ParseInput_ReturnsEmptyList_WhenInputIsNullOrWhitespace()

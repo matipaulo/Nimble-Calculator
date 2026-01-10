@@ -1,51 +1,35 @@
-﻿using Calculator.Operations;
+﻿using Calculator;
+using Calculator.Operations;
 using Calculator.Parsers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
+// Configure and build the generic host with all required services.
 using var host = Host.CreateDefaultBuilder(args)
     .ConfigureServices(services =>
     {
+        // Parsing
+        services.AddSingleton<IDelimiterStrategy, MultiCharacterDelimiterStrategy>();
+        services.AddSingleton<IDelimiterStrategy, SingleCharacterDelimiterStrategy>();
+        services.AddSingleton<IDelimiterStrategy, DefaultDelimiterStrategy>();
         services.AddSingleton<IInputParser, InputParser>();
+
+        // Operations
         services.AddSingleton<IOperation, SumOperation>();
         services.AddSingleton<IOperationExecutor, OperationExecutor>();
+
+        // Application
+        services.AddSingleton<CalculatorConsoleApp>();
     })
     .Build();
 
-using var cts = new CancellationTokenSource();
+// Ensure the application terminates immediately when Ctrl+C is pressed.
 Console.CancelKeyPress += (_, e) =>
 {
     e.Cancel = true;
-    if (!cts.IsCancellationRequested)
-        cts.Cancel();
+    Environment.Exit(0);
 };
 
-var parser = host.Services.GetRequiredService<IInputParser>();
-var executor = host.Services.GetRequiredService<IOperationExecutor>();
-var token = cts.Token;
-
-Console.Clear();
-
-while (!token.IsCancellationRequested)
-{
-    Console.Write(">> ");
-    var input = Console.ReadLine();
-
-    if (input is null || string.IsNullOrWhiteSpace(input))
-        continue;
-
-    try
-    {
-        var numbers = parser.ParseInput(input);
-        var result = executor.ExecuteOnCollection(numbers);
-
-        Console.WriteLine(result);
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine($"An unexpected error occurred: {ex.Message}");
-    }
-}
-
-Console.WriteLine("Application terminated. Press Enter to exit.");
-Console.ReadLine();
+// Resolve and run the main console application loop.
+var app = host.Services.GetRequiredService<CalculatorConsoleApp>();
+app.Run();
