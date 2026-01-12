@@ -1,4 +1,4 @@
-﻿namespace Calculator.Tests.Parsers;
+﻿﻿namespace Calculator.Tests.Parsers;
 
 using Calculator.Parsers;
 
@@ -7,9 +7,7 @@ public class InputParserTests
     private readonly InputParser _inputParser = new(
         new IDelimiterStrategy[]
         {
-            new MultiCharacterDelimiterStrategy(),
-            new SingleCharacterDelimiterStrategy(),
-            new DefaultDelimiterStrategy()
+            new RegexDelimiterStrategy()
         });
 
     [Fact]

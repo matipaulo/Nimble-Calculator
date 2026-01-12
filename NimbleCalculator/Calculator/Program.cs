@@ -1,4 +1,4 @@
-﻿using Calculator;
+﻿﻿using Calculator;
 using Calculator.Operations;
 using Calculator.Parsers;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,9 +9,7 @@ using var host = Host.CreateDefaultBuilder(args)
     .ConfigureServices(services =>
     {
         // Parsing
-        services.AddSingleton<IDelimiterStrategy, MultiCharacterDelimiterStrategy>();
-        services.AddSingleton<IDelimiterStrategy, SingleCharacterDelimiterStrategy>();
-        services.AddSingleton<IDelimiterStrategy, DefaultDelimiterStrategy>();
+        services.AddSingleton<IDelimiterStrategy, RegexDelimiterStrategy>();
         services.AddSingleton<IInputParser, InputParser>();
 
         // Operations
